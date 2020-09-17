@@ -103,6 +103,17 @@ RCT_EXPORT_METHOD(setUserProfileID:(NSString *)userProfileID)
     [YMMYandexMetrica setUserProfileID:userProfileID];
 }
 
+RCT_EXPORT_METHOD(reportRevenue:(NSInteger *)priceMicros currency:(NSString *)currency productId:(NSString *)productId)
+{
+  NSDecimalNumber * price = (NSDecimalNumber *)[NSDecimalNumber numberWithInteger:priceMicros];
+  YMMMutableRevenueInfo *revenueInfo = [[YMMMutableRevenueInfo alloc] initWithPriceDecimal:price currency:currency];
+  revenueInfo.productID = productId;
+  [YMMYandexMetrica reportRevenue:[revenueInfo copy] onFailure:^(NSError *error) {
+    NSLog(@"Revenue error: %@", error);
+  }];
+}
+
+
 - (NSObject *)wrap:(NSObject *)value
 {
     if (value == nil) {
